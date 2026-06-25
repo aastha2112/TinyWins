@@ -8,7 +8,7 @@ const Details = () => {
   return (
     <SafeAreaView>
       <View>
-        <Text>YOUR TINY WIN !!</Text>
+        <Text>YOUR TINY WINS !!</Text>
 
         <Text>{winText}</Text>
         <Text>{id}</Text>
