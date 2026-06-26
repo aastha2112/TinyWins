@@ -1,9 +1,14 @@
-import { StyleSheet, Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 const FinalScreen = () => {
+  const router = useRouter();
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Final Screen</Text>
+      <Pressable onPress={() => router.replace("/Home")}>
+        <Text style={styles.text}>Next</Text>
+      </Pressable>
     </View>
   );
 };
