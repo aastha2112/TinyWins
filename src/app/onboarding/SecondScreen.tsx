@@ -1,5 +1,5 @@
 import { onboardingStyles } from "@/components/styles/OnboardingScreenStyles";
-import { LogoGlow } from "@/constants/images/images";
+import { ReactLogo } from "@/constants/images/images";
 import { useRouter } from "expo-router";
 import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -18,7 +18,7 @@ const SecondScreen = () => {
           Celebrate showing up today.
         </Text>
 
-        <Image source={LogoGlow} style={onboardingStyles.logo} />
+        <Image source={ReactLogo} style={onboardingStyles.logo} />
       </View>
 
       <View style={onboardingStyles.buttonContainer}>
