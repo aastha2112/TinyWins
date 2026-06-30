@@ -1,11 +1,37 @@
-import * as SecureStore from 'expo-secure-store'
+import { Platform } from 'react-native'
 
 const TOKEN_KEY = 'user-token'
+
+function getStore() {
+  if (Platform.OS === 'web') {
+    return {
+      async getItemAsync(key: string) { return localStorage.getItem(key) },
+      async setItemAsync(key: string, value: string) { localStorage.setItem(key, value) },
+      async deleteItemAsync(key: string) { localStorage.removeItem(key) },
+    }
+  }
+  try {
+    const SecureStore = require('expo-secure-store')
+    return {
+      async getItemAsync(key: string) { return await SecureStore.getItemAsync(key) },
+      async setItemAsync(key: string, value: string) { return await SecureStore.setItemAsync(key, value) },
+      async deleteItemAsync(key: string) { return await SecureStore.deleteItemAsync(key) },
+    }
+  } catch {
+    return {
+      async getItemAsync(_key: string) { return null },
+      async setItemAsync(_key: string, _value: string) {},
+      async deleteItemAsync(_key: string) {},
+    }
+  }
+}
+
+const store = getStore()
 
 export const tokenStorage = {
     async getToken(): Promise<string | null> {
        try {
-        return await SecureStore.getItemAsync(TOKEN_KEY)
+        return await store.getItemAsync(TOKEN_KEY)
        } catch (error) {
         console.log('ERROR READING TOKEN, in getToken()', error)
         return null
@@ -13,7 +39,7 @@ export const tokenStorage = {
     },
     async saveToken(token : string): Promise<boolean> {
         try {
-           await SecureStore.setItemAsync(TOKEN_KEY, token);
+           await store.setItemAsync(TOKEN_KEY, token);
            return true;
         } catch (error) {
         console.log('ERROR SAVING TOKEN, in saveToken()', error)
@@ -22,7 +48,7 @@ export const tokenStorage = {
     },
     async deleteToken(): Promise<boolean> {
         try {
-           await SecureStore.deleteItemAsync(TOKEN_KEY);
+           await store.deleteItemAsync(TOKEN_KEY);
            return true;
         } catch (error) {
         console.log('ERROR CLEARING TOKEN, in deleteToken()', error)

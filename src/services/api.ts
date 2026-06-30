@@ -1,6 +1,7 @@
+import { Alert } from 'react-native';
 import {tokenStorage} from '../utils/tokenStorage';
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = 'http://192.168.29.236:8080';
 
 interface RequestOptions extends RequestInit{
     requireAuth? : boolean
@@ -22,15 +23,17 @@ export const apiClient = async (endpoint : string, options: RequestOptions = {})
         }
     }
 
-    const response = await fetch(`${BASE_URL}/${endpoint}`, {
+    const response = await fetch(`${BASE_URL}${endpoint}`, {
         headers, 
         ...customOptions
     })
 
     const data = await response.json()
-
-    if(!response.ok){
+    console.log("DATA", data)
+    if(data.error){
         console.log('RESPONSE NOT OK')
+        Alert.alert(data.message)
+        return
     }
 
     return data
