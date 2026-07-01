@@ -35,7 +35,7 @@ const Register = () => {
       <View style={CommonStyles.screenViewContainer}>
         <Text>Register Here!</Text>
         <Label>Email</Label>
-        <TextInput value={user.email} placeholder="Email address" onChangeText={(text)=>setUser({...user, email: text})}/>
+        <TextInput value={user.email} placeholder="Email Address" onChangeText={(text)=>setUser({...user, email: text})}/>
         <Label>Create Password</Label>
         <TextInput value={user.password} placeholder="Create Password" onChangeText={(text)=>setUser({...user, password: text})}/>
         <Pressable onPress={handleLogin}>
