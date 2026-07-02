@@ -5,7 +5,7 @@ import { useState } from "react";
 import { Alert, Pressable, Text, TextInput, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const Register = () => {
+const Login = () => {
   const [loading, setLoading] = useState(false)
   const [user, setUser] = useState({
     email: "",
@@ -26,6 +26,7 @@ const Register = () => {
 
       await router.push('/Home')
     }catch (err){
+      Alert.alert('Login Failed !!', String(err))
       console.log(err, 'Login not working')
     }
   }
@@ -46,4 +47,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default Login;
