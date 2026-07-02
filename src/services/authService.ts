@@ -13,7 +13,7 @@ export const authService =  {
         if(data.access_token){
            await tokenStorage.saveToken(data.access_token) 
         }
-        return data
+        return { access_token: data.access_token, user: data.user }
     },
 
     async login(payload: Record<string, any>){
@@ -25,7 +25,7 @@ export const authService =  {
         if(data.access_token){
             await tokenStorage.saveToken(data.access_token) 
          }
-         return data
+         return { access_token: data.access_token, user: data.user }
     },
 
     async logout(){

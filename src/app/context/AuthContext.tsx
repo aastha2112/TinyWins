@@ -1,3 +1,5 @@
+import { authService } from "@/services/authService"
+import { User } from "@/types/auth.types"
 import { tokenStorage } from "@/utils/tokenStorage"
 import { createContext, useContext, useState } from "react"
 import { Alert } from "react-native"
@@ -5,40 +7,50 @@ import { Alert } from "react-native"
 
 
 export const AuthContext = createContext<{
-    user: {} | null,
+    user: User | null,
     token: string | null,
     isLoading: boolean,
     isAuthenticated: boolean,
-    login: (token: string, user:{name?:string, email: string, password: string})=>void,
+    login: (token: string, user: User)=>void,
     logout: ()=>void,
-    register: ()=>void,
-}>({
+    register: (email: string, password: string, name?: string) => Promise<void>,}>({
     user: null ,
-    token: '',
+    token: null,
     isLoading: false,
     isAuthenticated: false,
     login: ()=>{},
     logout: ()=>{},
-    register: ()=>{},
+    register: async ()=>{},
 })
 const AuthProvider = ({children}: {children: React.ReactNode}) => {
 
-    const [user, setUser] = useState<{
-        name?:string,
-        email: string,
-        password: string
-    } | null>(null)
+    const [user, setUser] = useState<User| null>(null)
     const [token, setToken] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
 
-    const register = async()=>{}
-    const login = async(token: string, user:{name?:string, email: string, password: string
-    })=>{
+    const register = async( email: string, password: string, name?: string)=>{
+        setIsLoading(true)
+        try{
+            const data = await authService.register({name, email, password})
+            await tokenStorage.saveToken(data.access_token)
+            setUser(data.user)
+            setToken(data.access_token)
+            setIsAuthenticated(true)
+        }catch(err){
+            console.log(err, 'Register not working')
+            Alert.alert('Register Failed !!', String(err))
+        }finally{
+            setIsLoading(false)
+        }
+    }
+
+    const login = async(token: string, user: User
+    )=>{
         setIsLoading(true)
         try{
             await tokenStorage.saveToken(token)
-            await setUser(user)
+            setUser(user)
             setToken(token)
             setIsAuthenticated(true)
         }catch(err){
@@ -63,7 +75,7 @@ const AuthProvider = ({children}: {children: React.ReactNode}) => {
   )
 }
 
-export default AuthContext
+export default AuthProvider
 
 export const useAuth = () => {
     return useContext(AuthContext)
