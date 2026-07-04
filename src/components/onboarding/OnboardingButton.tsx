@@ -1,5 +1,5 @@
 import { Pressable, Text } from "react-native";
-import { onboardingStyles } from "./styles/OnboardingScreenStyles";
+import { onboardingStyles } from "../styles/OnboardingScreenStyles";
 
 const OnboardingButton = ({
   children,

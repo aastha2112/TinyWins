@@ -1,7 +1,7 @@
 import { Alert } from 'react-native';
 import {tokenStorage} from '../utils/tokenStorage';
 
-const BASE_URL = 'http://192.168.29.236:8080';
+const BASE_URL = 'http://10.0.2.2:8080';
 
 interface RequestOptions extends RequestInit{
     requireAuth? : boolean

@@ -1,6 +1,6 @@
 import { useRouter } from "expo-router";
 import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
-import { onboardingStyles } from "./styles/OnboardingScreenStyles";
+import { onboardingStyles } from "../styles/OnboardingScreenStyles";
 
 const AuthButtonsModal = ({
   visible,

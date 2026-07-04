@@ -1,4 +1,4 @@
-import AuthButtonsModal from "@/components/AuthButtonsModal";
+import AuthButtonsModal from "@/components/onboarding/AuthButtonsModal";
 import { onboardingStyles } from "@/components/styles/OnboardingScreenStyles";
 import { ExpoLogo } from "@/constants/images/images";
 import { useRouter } from "expo-router";
@@ -38,7 +38,6 @@ const FinalScreen = () => {
                   console.log("auth", isAuthModalOpen);
                   setIsAuthModalOpen(!isAuthModalOpen);
                 }}
-                // onPress={() => router.replace("/Home")}
                 style={onboardingStyles.button}
               >
                 <Text style={onboardingStyles.buttonText}>Get Started</Text>

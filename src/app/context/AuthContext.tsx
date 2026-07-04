@@ -39,7 +39,7 @@ const AuthProvider = ({children}: {children: React.ReactNode}) => {
             setIsAuthenticated(true)
         }catch(err){
             console.log(err, 'Register not working')
-            Alert.alert('Register Failed !!', String(err))
+            throw err
         }finally{
             setIsLoading(false)
         }

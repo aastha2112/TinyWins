@@ -1,4 +1,4 @@
-import OnboardingButton from "@/components/OnboardingButton";
+import OnboardingButton from "@/components/onboarding/OnboardingButton";
 import { onboardingStyles } from "@/components/styles/OnboardingScreenStyles";
 import { LogoGlow } from "@/constants/images/images";
 import { useRouter } from "expo-router";
