@@ -1,11 +1,11 @@
  export interface AuthFormData {
-    name?: string,
-    email: string,
-    password: string
+     email: string,
+     password: string
+     name?: string,
 }
 
 export interface User {
     id: string,
-    name?: string,
     email: string
+    name?: string,
 }

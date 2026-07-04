@@ -17,7 +17,9 @@ function getStore() {
       async setItemAsync(key: string, value: string) { return await SecureStore.setItemAsync(key, value) },
       async deleteItemAsync(key: string) { return await SecureStore.deleteItemAsync(key) },
     }
-  } catch {
+  } catch (e) {
+    console.log('SECURESTORE REQUIRE FAILED:', e)
+
     return {
       async getItemAsync(_key: string) { return null },
       async setItemAsync(_key: string, _value: string) {},
@@ -27,6 +29,7 @@ function getStore() {
 }
 
 const store = getStore()
+console.log('STORE TYPE CHECK:', store)
 
 export const tokenStorage = {
     async getToken(): Promise<string | null> {

@@ -30,7 +30,7 @@ export const apiClient = async (endpoint : string, options: RequestOptions = {})
 
     const data = await response.json()
     console.log("DATA", data)
-    if(data.error){
+    if(!response.ok){
         console.log('RESPONSE NOT OK')
         Alert.alert(data.message)
         return
