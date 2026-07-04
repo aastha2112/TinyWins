@@ -1,4 +1,3 @@
-import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 
 const DailyAffirmation = () => {
@@ -18,9 +17,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         height: 150,
-        backgroundColor: '#FFD6BA',
+        backgroundColor: '#FCE74E',
         borderRadius: 20,
-        marginTop: 20
+        marginTop: 15
     },
     quote: {
         fontSize: 16,
