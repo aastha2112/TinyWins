@@ -28,13 +28,13 @@ const AuthButtonsModal = ({
           </Text>
           <Pressable
             style={onboardingStyles.button}
-            onPress={() => router.push("/Register")}
+            onPress={() => router.push("/(auth)/Register")}
           >
             <Text style={onboardingStyles.buttonText}>Register</Text>
           </Pressable>
           <Pressable
             style={onboardingStyles.button}
-            onPress={() => router.push("/Login")}
+            onPress={() => router.push("/(auth)/Login")}
           >
             <Text style={onboardingStyles.buttonText}>Login</Text>
           </Pressable>

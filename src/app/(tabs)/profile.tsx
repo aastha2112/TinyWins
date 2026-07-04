@@ -1,12 +1,12 @@
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const Home = () => {
+const Profile = () => {
   return (
     <View>
-      <Text>Home</Text>
+      <Text>Profile</Text>
     </View>
   );
 };
 
-export default Home;
+export default Profile;

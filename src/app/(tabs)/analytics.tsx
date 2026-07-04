@@ -1,12 +1,12 @@
 import { Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const Home = () => {
+const Analytics = () => {
   return (
     <View>
-      <Text>Home</Text>
+      <Text>Analytics</Text>
     </View>
   );
 };
 
-export default Home;
+export default Analytics;
