@@ -11,10 +11,11 @@ export const SingleWinStyles = StyleSheet.create({
         justifyContent: 'space-around'
     },
     winTextCont: {
-        gap: 2
+        gap: 2,
+        
     },
     winTitle: {
-        fontSize: 17,
+        fontSize: 18,
         fontWeight: 500,
         color: '#000'
     },
@@ -23,5 +24,9 @@ export const SingleWinStyles = StyleSheet.create({
         fontWeight: 500,
         color: '#808080'
     },
-    winWin: {},
+    winWin: {
+        padding: 14,
+        borderLeftColor: '#80808080',
+        borderLeftWidth: 1
+    },
 })

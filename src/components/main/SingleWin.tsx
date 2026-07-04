@@ -11,7 +11,7 @@ const SingleWin = () => {
             <Text style={SingleWinStyles.winTitle}>Win of the day</Text>
             <Text style={SingleWinStyles.winSubtitle}>Win of the day subtitle if any</Text>
             </View>
-            <View>
+            <View style={SingleWinStyles.winWin}>
             <Ionicons name='add-circle-outline' size={20} color={'#808080'}/>
             </View>
         </View>
