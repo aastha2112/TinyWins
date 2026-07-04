@@ -17,17 +17,20 @@ export const CommonStyles = StyleSheet.create({
     headingText: {
         fontSize: 28,
         color: '#000',
-        fontWeight: 600
+        fontWeight: 600,
+        padding: 4
     },
     subHeadingText:{
         fontSize: 18,
         color: '#808080',
-        fontWeight: 500
+        fontWeight: 500,
+        padding: 4
     },
     normalText: {
         fontSize: 14,
         color: '#808080',
-        fontWeight: 400
+        fontWeight: 400,
+        padding: 4
     },
     // button
     button: {

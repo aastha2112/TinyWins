@@ -1,10 +1,14 @@
+import CustomCalendarBar from "@/components/main/CustomCalendarBar";
+import DailyAffirmation from "@/components/main/DailyAffirmation";
+import { CommonStyles } from "@/components/styles/CommonStyles";
 import { Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 const Home = () => {
   return (
     <View>
-      <Text>Home</Text>
+      <Text style={CommonStyles.headingText}>Hi, Aastha !</Text>
+      <CustomCalendarBar/>
+      <DailyAffirmation/>
     </View>
   );
 };
