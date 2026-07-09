@@ -6,9 +6,11 @@ import { Ionicons } from "@expo/vector-icons";
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
 import Entypo from '@expo/vector-icons/Entypo';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import HabitProvider from "@/context/HabitsContext";
 
 const MainLayout = () => {
   return (
+    <HabitProvider>
     <SafeAreaView style={CommonStyles.screenSafeView}>
     <Tabs screenOptions={{ 
       headerShown: false 
@@ -29,6 +31,7 @@ const MainLayout = () => {
             ) }} />
     </Tabs>
     </SafeAreaView>
+    </HabitProvider>
   );
 };
 

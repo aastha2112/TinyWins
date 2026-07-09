@@ -49,7 +49,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       await tokenStorage.saveToken(token);
       const check = await tokenStorage.getToken()
-console.log('IMMEDIATE CHECK AFTER SAVE:', check)
+      console.log('IMMEDIATE CHECK AFTER SAVE:', check)
       setUser(user);
       setToken(token);
       setIsAuthenticated(true);
