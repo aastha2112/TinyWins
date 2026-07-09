@@ -2,7 +2,6 @@ import { Text, TouchableOpacity, View } from 'react-native'
 import { TabBarStyles } from '../styles/TabBarStyles';
 
 const CustomTabBar = ({state, descriptors, navigation } : {state: any, descriptors: any, navigation: any}) => {
-  console.log('tab bar mounted')
    return (<View style={TabBarStyles.tabBarContainer}>
    {
     state.routes.map((route : any, index: number)=>{

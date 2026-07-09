@@ -5,25 +5,29 @@ import { CommonStyles } from "@/components/styles/CommonStyles";
 import { Text, View } from "react-native";
 import { useAuth } from "../../context/AuthContext";
 import { useHabits } from "@/context/HabitsContext";
+import { useState } from "react";
 
 const Home = () => {
-  const {user} = useAuth()
-  const {habits, isLoading} = useHabits()
-  const userName = user?.name?.split(' ')[0]
+  const { user } = useAuth();
+  const { habits, isLoading } = useHabits();
+  const userName = user?.name?.split(" ")[0];
+  const today = new Date().getDay();
 
-  console.log(userName, 'user')
-  console.log(habits, 'habits')
-
+  const todayHabits = habits.filter((habit) =>
+    habit?.frequency?.includes(today),
+  );
   return (
     <View>
       <Text style={CommonStyles.headingText}>Hi, {userName} !</Text>
-      <CustomCalendarBar/>
-      <DailyAffirmation/>
-      { isLoading ? (
+      <CustomCalendarBar />
+      <DailyAffirmation />
+      {isLoading ? (
         <View>
           <Text>loading...</Text>
         </View>
-      ):  (<DailyWinsHome habitsForToday={habits}/>)}
+      ) : (
+        <DailyWinsHome habitsForToday={todayHabits} />
+      )}
     </View>
   );
 };

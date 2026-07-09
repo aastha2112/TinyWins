@@ -8,7 +8,6 @@ function InnerLayout() {
   const router = useRouter()
 
 useEffect(()=>{
-  console.log(isAuthenticated, 'isAuthenticated')
   if( !isLoading && isAuthenticated){
     router.replace('/(tabs)/home')
   }

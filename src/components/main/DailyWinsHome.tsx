@@ -4,7 +4,6 @@ import SingleWin from './SingleWin'
 import { Habit } from '@/types/habit.types'
 
 const DailyWinsHome = ({habitsForToday}: {habitsForToday: Habit[]}) => {
-  console.log(habitsForToday, 'today habits')
   return (
     <View style={{marginHorizontal: 4, marginTop: 20}}>
         <Text style={[CommonStyles.subHeadingText, {color: 'black', marginBottom: 10}]}>Daily Wins</Text>
@@ -14,7 +13,6 @@ const DailyWinsHome = ({habitsForToday}: {habitsForToday: Habit[]}) => {
             habitsForToday.map((habit: any)=>{
               return <SingleWin habit={habit} key={habit.id}/>
             })
-
           ): (
             <View>
               <Text>No habits created yet!</Text>

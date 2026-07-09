@@ -29,7 +29,6 @@ function getStore() {
 }
 
 const store = getStore()
-console.log('STORE TYPE CHECK:', store)
 
 export const tokenStorage = {
     async getToken(): Promise<string | null> {

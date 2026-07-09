@@ -4,7 +4,6 @@ import { Ionicons } from '@expo/vector-icons'
 import { Habit } from '@/types/habit.types'
 
 const SingleWin = ({habit}: {habit: Habit}) => {
-  console.log(habit, 'from singlewin')
   return (
     
         <View style={SingleWinStyles.winContainer}>

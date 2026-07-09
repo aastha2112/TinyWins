@@ -1,15 +1,12 @@
 import AuthButtonsModal from "@/components/onboarding/AuthButtonsModal";
 import { onboardingStyles } from "@/components/styles/OnboardingScreenStyles";
 import { ExpoLogo } from "@/constants/images/images";
-import { useRouter } from "expo-router";
 import { useState } from "react";
 import { Image, Pressable, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const FinalScreen = () => {
-  console.log("final");
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const router = useRouter();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -35,7 +32,6 @@ const FinalScreen = () => {
             <View style={onboardingStyles.buttonContainer}>
               <Pressable
                 onPress={() => {
-                  console.log("auth", isAuthModalOpen);
                   setIsAuthModalOpen(!isAuthModalOpen);
                 }}
                 style={onboardingStyles.button}

@@ -48,8 +48,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsLoading(true);
     try {
       await tokenStorage.saveToken(token);
-      const check = await tokenStorage.getToken()
-      console.log('IMMEDIATE CHECK AFTER SAVE:', check)
       setUser(user);
       setToken(token);
       setIsAuthenticated(true);
@@ -74,12 +72,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         try {
             setIsLoading(true)
             const token = await tokenStorage.getToken()
-            console.log('BOOTSTRAP - token from storage:', token)
 
             if(token){
                 const result = decodeToken(token)
-                console.log(result, 'token decoded')
-                console.log('BOOTSTRAP - decoded:', result)
 
                 if(result){
                     setUser({id: result.sub, email: result.email, name: result.name })

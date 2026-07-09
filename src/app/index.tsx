@@ -7,7 +7,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function App() {
   const router = useRouter();
-  console.log("mounted");
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
