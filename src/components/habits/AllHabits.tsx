@@ -13,7 +13,7 @@ const AllHabits = ({habitsForToday}: {habitsForToday: Habit[]}) => {
           {
             habitsForToday.length !== 0 ? (
               habitsForToday.map((habit: any)=>{
-                return <SingleWin habit={habit} key={habit.id}/>
+                return <SingleWin habit={habit} isCompleted={true} onToggle={()=>{}} key={habit.id}/>
               })
             ): (
               <View>
