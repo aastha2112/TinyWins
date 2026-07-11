@@ -2,16 +2,21 @@ import { Text, View } from 'react-native'
 import { CommonStyles } from '../styles/CommonStyles'
 import SingleWin from './SingleWin'
 import { Habit } from '@/types/habit.types'
+import { useHabits } from '@/context/HabitsContext'
 
 const DailyWinsHome = ({habitsForToday}: {habitsForToday: Habit[]}) => {
+  const {toggleHabitToday, todaysWins} = useHabits()
   return (
     <View style={{marginHorizontal: 4, marginTop: 20}}>
         <Text style={[CommonStyles.subHeadingText, {color: 'black', marginBottom: 10}]}>Daily Wins</Text>
-        <View style={[CommonStyles.screenViewContainer, { gap: 14, width: '100%'}]}>
+        <View style={{gap: 10}}>
+
         {
-          habitsForToday.length !== 0 ? (
-            habitsForToday.map((habit: any)=>{
-              return <SingleWin habit={habit} key={habit.id}/>
+          habitsForToday?.length ? (
+            habitsForToday?.map((habit: any)=>{
+              return (
+                <SingleWin habit={habit} key={habit.id} isCompleted={todaysWins.includes(habit.id)} onToggle={toggleHabitToday}/>
+              )
             })
           ): (
             <View>
@@ -19,8 +24,9 @@ const DailyWinsHome = ({habitsForToday}: {habitsForToday: Habit[]}) => {
             </View>
           )
         }
-
         </View>
+
+
     </View>
   )
 }

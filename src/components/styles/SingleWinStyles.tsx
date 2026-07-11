@@ -24,9 +24,15 @@ export const SingleWinStyles = StyleSheet.create({
         fontWeight: 500,
         color: '#808080'
     },
+    winIcon: {
+        fontSize: 25,
+    },
     winWin: {
         padding: 14,
         borderLeftColor: '#80808080',
         borderLeftWidth: 1
     },
+    checkboxContainer: {
+        padding: 10
+    }
 })

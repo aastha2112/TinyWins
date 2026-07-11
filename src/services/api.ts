@@ -29,10 +29,15 @@ export const apiClient = async (endpoint : string, options: RequestOptions = {})
     })
 
     const data = await response.json()
+    
     if(!response.ok){
         console.log('RESPONSE NOT OK')
+        if(response.status === 401){
+            await tokenStorage.deleteToken()
+        }
         Alert.alert(data.message)
-        return
+        throw new Error(data.message || 'Something went wrong')
+
     }
 
     return data
