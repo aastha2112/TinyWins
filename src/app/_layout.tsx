@@ -2,6 +2,7 @@ import { Stack, useRouter } from "expo-router";
 import AuthProvider, { useAuth } from "../context/AuthContext";
 import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
+import HabitProvider from "@/context/HabitsContext";
 
 function InnerLayout() {
   const {isAuthenticated, isLoading} = useAuth()
@@ -37,7 +38,9 @@ if(isLoading){
 export default function RootLayout(){
   return (
     <AuthProvider>
+      <HabitProvider>
       <InnerLayout/>
+      </HabitProvider>
     </AuthProvider>
   )
 }

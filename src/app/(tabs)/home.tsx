@@ -21,7 +21,7 @@ const Home = () => {
           <Text>loading...</Text>
         </View>
       ) : (
-        <DailyWinsHome habitsForToday={habits?.slice(0, 3)} />
+        <DailyWinsHome habitsForToday={habits} />
       )}
     </View>
   );

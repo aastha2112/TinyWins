@@ -43,6 +43,8 @@ const CreateHabitForm = () => {
       return
     }
     setSubmitting(true)
+    console.log('working')
+
     try {
       await createHabit({
         title: title.trim(),

@@ -22,14 +22,17 @@ export const apiClient = async (endpoint : string, options: RequestOptions = {})
             headers['Authorization'] = `Bearer ${token}`
         }
     }
+    console.log('APICLIENT CALLING', endpoint, customOptions)
 
     const response = await fetch(`${BASE_URL}${endpoint}`, {
         headers, 
         ...customOptions
     })
+    console.log('APICLIENT RESPONSE STATUS', response.status)
 
     const data = await response.json()
-    
+    console.log('APICLIENT DATA', data)
+
     if(!response.ok){
         console.log('RESPONSE NOT OK')
         if(response.status === 401){

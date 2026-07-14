@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { Alert } from "react-native";
 import { Habit } from "@/types/habit.types";
 import { habitService } from "@/services/habitService";
-import { Alert } from "react-native";
 import { winsService } from "@/services/winService";
 
 export interface HabitContextInterface{
