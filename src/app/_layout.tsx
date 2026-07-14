@@ -30,6 +30,7 @@ if(isLoading){
       <Stack.Screen name="(auth)" />
       <Stack.Screen name="(tabs)" />
       <Stack.Screen name="create-habit" options={{ presentation: 'modal', headerShown: true, title: 'New Habit' }} />
+      <Stack.Screen name="edit-habit/[id]" options={{ presentation: 'modal', headerShown: true, title: 'Edit Habit' }} />
     </Stack>
   );
 }
