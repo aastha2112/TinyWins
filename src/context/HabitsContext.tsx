@@ -55,7 +55,8 @@ const HabitProvider = ({children}: {children: React.ReactNode})=>{
     const createHabit=async(payload: any)=>{
         setIsLoading(true)
         try {
-            await habitService.createHabit(payload)
+            const response = await habitService.createHabit(payload)
+            console.log('CREATE RESPONSE', response)
             await fetchHabits()
         } catch (error) {
             Alert.alert("Couldn't add habit!", String(error))
