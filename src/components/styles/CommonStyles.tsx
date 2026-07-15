@@ -4,8 +4,9 @@ export const CommonStyles = StyleSheet.create({
     // screen
     screenSafeView: {
         flex: 1,
-        paddingTop: 10,
-        paddingHorizontal: 25,
+        paddingTop: 0,
+        paddingHorizontal: 10,
+
     },
     // container
     screenViewContainer: {

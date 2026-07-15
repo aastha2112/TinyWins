@@ -30,5 +30,9 @@ export const authService =  {
 
     async logout(){
         await tokenStorage.deleteToken()
-    }
+    },
+
+    async getMe() {
+        return await apiClient('/auth/me')
+      }
 }
