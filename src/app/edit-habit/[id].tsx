@@ -1,5 +1,10 @@
-import { CommonStyles } from '@/components/styles/CommonStyles'
+import PrimaryButton from '@/components/ui/PrimaryButton'
+import SoftCard from '@/components/ui/SoftCard'
+import { theme } from '@/constants/theme'
+import { HABIT_COLORS } from '@/constants/habitColors'
 import { useHabits } from '@/context/HabitsContext'
+import { Ionicons } from '@expo/vector-icons'
+import { LinearGradient } from 'expo-linear-gradient'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import React, { useEffect, useState } from 'react'
 import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native'
@@ -15,9 +20,7 @@ const DAYS = [
   { label: 'S', value: 0 },
 ]
 
-const ICONS = ['💧', '🏃', '📚', '🧘', '💪', '🎨', '🥗', '🎵']
-
-const COLORS = ['#FFB5C0', '#B5F2C0', '#FFE58A', '#A8D8FF', '#D9B8FF', '#FFC98A']
+const ICONS = ['💧', '🏃', '📚', '🧘', '💪', '🎨', '🥗', '🎵', '😴', '✍️']
 
 const EditHabitForm = () => {
   const router = useRouter()
@@ -30,7 +33,7 @@ const EditHabitForm = () => {
   const [note, setNote] = useState('')
   const [selectedDays, setSelectedDays] = useState<number[]>([])
   const [selectedIcon, setSelectedIcon] = useState(ICONS[0])
-  const [selectedColor, setSelectedColor] = useState(COLORS[0])
+  const [selectedColor, setSelectedColor] = useState(HABIT_COLORS[0])
   const [submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
@@ -39,7 +42,7 @@ const EditHabitForm = () => {
       setNote(habit.subtitle ?? '')
       setSelectedDays(habit.frequency ?? [])
       setSelectedIcon(habit.icon ?? ICONS[0])
-      setSelectedColor(habit.color ?? COLORS[0])
+      setSelectedColor(habit.color ?? HABIT_COLORS[0])
     }
   }, [habit])
 
@@ -73,7 +76,7 @@ const EditHabitForm = () => {
   }
 
   const handleDelete = () => {
-    Alert.alert('Delete this habit?', 'This will remove it from your list. Your past history stays intact.', [
+    Alert.alert('Delete this habit?', 'Your past history stays intact.', [
       { text: 'Cancel', style: 'cancel' },
       {
         text: 'Delete',
@@ -93,99 +96,111 @@ const EditHabitForm = () => {
 
   if (!habit) {
     return (
-      <SafeAreaView style={CommonStyles.screenSafeView}>
-        <View style={styles.formWrapper}>
-          <Text>Habit not found</Text>
-        </View>
+      <SafeAreaView style={styles.screen}>
+        <Text>Habit not found</Text>
       </SafeAreaView>
     )
   }
 
   return (
-    <SafeAreaView style={CommonStyles.screenSafeView}>
-      <ScrollView contentContainerStyle={styles.formWrapper} keyboardShouldPersistTaps="handled">
-        <View style={[styles.iconPreview, { backgroundColor: selectedColor }]}>
-          <Text style={{ fontSize: 40 }}>{selectedIcon}</Text>
+    <SafeAreaView style={styles.screen} edges={['top', 'bottom']}>
+      <View style={styles.headerRow}>
+        <Text style={styles.headerTitle}>Edit Habit</Text>
+        <View style={{ flexDirection: 'row', gap: 8 }}>
+          <Pressable onPress={handleDelete} hitSlop={10} style={styles.deleteBtn}>
+            <Ionicons name="trash-outline" size={18} color={theme.colors.danger} />
+          </Pressable>
+          <Pressable onPress={() => router.back()} hitSlop={10} style={styles.closeBtn}>
+            <Ionicons name="close" size={20} color={theme.colors.textSecondary} />
+          </Pressable>
         </View>
+      </View>
 
-        <Text style={styles.label}>Habit Name</Text>
-        <TextInput
-          placeholder="Morning Meditation"
-          value={title}
-          onChangeText={setTitle}
-          style={styles.inputField}
-          placeholderTextColor="#999"
-        />
-
-        <Text style={styles.label}>Note (optional)</Text>
-        <TextInput
-          placeholder="notes"
-          value={note}
-          onChangeText={setNote}
-          style={styles.inputField}
-          placeholderTextColor="#999"
-        />
-
-        <Text style={styles.label}>Repeat Days</Text>
-        <View style={styles.wrapper}>
-          {DAYS.map((day, idx) => {
-            const active = selectedDays.includes(day.value)
-            return (
-              <Pressable
-                key={`${day.value}-${idx}`}
-                onPress={() => toggleDay(day.value)}
-                style={[styles.dayChip, active && styles.dayChipActive]}
-              >
-                <Text style={[styles.dayChipText, active && styles.dayChipTextActive]}>
-                  {day.label}
-                </Text>
-              </Pressable>
-            )
-          })}
-        </View>
-
-        <Text style={styles.label}>Icon</Text>
-        <View style={styles.wrapper}>
-          {ICONS.map((icon) => {
-            const active = selectedIcon === icon
-            return (
-              <Pressable
-                key={icon}
-                onPress={() => setSelectedIcon(icon)}
-                style={[styles.iconChip, active && styles.iconChipActive]}
-              >
-                <Text style={{ fontSize: 20 }}>{icon}</Text>
-              </Pressable>
-            )
-          })}
-        </View>
-
-        <Text style={styles.label}>Color</Text>
-        <View style={styles.wrapper}>
-          {COLORS.map((color) => {
-            const active = selectedColor === color
-            return (
-              <Pressable key={color} onPress={() => setSelectedColor(color)}>
-                <View
-                  style={[styles.colors, { backgroundColor: color }, active && styles.colorsActive]}
-                />
-              </Pressable>
-            )
-          })}
-        </View>
-
-        <Pressable
-          style={[styles.submitButton, submitting && { opacity: 0.6 }]}
-          onPress={handleSave}
-          disabled={submitting}
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+        <LinearGradient
+          colors={[theme.colors.gradientPink, theme.colors.gradientLavender]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.heroCard}
         >
-          <Text style={styles.submitButtonText}>{submitting ? 'Saving...' : 'Save Changes'}</Text>
-        </Pressable>
+          <View style={[styles.iconPreview, { backgroundColor: selectedColor }]}>
+            <Text style={{ fontSize: 28 }}>{selectedIcon}</Text>
+          </View>
+          <TextInput
+            placeholder="Habit name"
+            value={title}
+            onChangeText={setTitle}
+            style={styles.titleInput}
+            placeholderTextColor="rgba(26,26,26,0.35)"
+          />
+          <TextInput
+            placeholder="Note (optional)"
+            value={note}
+            onChangeText={setNote}
+            style={styles.noteInput}
+            placeholderTextColor="rgba(26,26,26,0.3)"
+          />
+        </LinearGradient>
 
-        <Pressable style={styles.deleteButton} onPress={handleDelete}>
-          <Text style={styles.deleteButtonText}>Delete Habit</Text>
-        </Pressable>
+        <SoftCard style={styles.section}>
+          <Text style={styles.label}>Repeat</Text>
+          <View style={styles.dayWrapper}>
+            {DAYS.map((day, idx) => {
+              const active = selectedDays.includes(day.value)
+              return (
+                <Pressable
+                  key={`${day.value}-${idx}`}
+                  onPress={() => toggleDay(day.value)}
+                  style={[styles.dayChip, active && { backgroundColor: selectedColor, borderColor: selectedColor }]}
+                >
+                  <Text style={[styles.dayChipText, active && styles.dayChipTextActive]}>
+                    {day.label}
+                  </Text>
+                </Pressable>
+              )
+            })}
+          </View>
+        </SoftCard>
+
+        <SoftCard style={styles.section}>
+          <Text style={styles.label}>Icon</Text>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+            {ICONS.map((icon) => {
+              const active = selectedIcon === icon
+              return (
+                <Pressable
+                  key={icon}
+                  onPress={() => setSelectedIcon(icon)}
+                  style={[styles.iconChip, active && { borderColor: selectedColor, backgroundColor: theme.colors.backgroundAlt }]}
+                >
+                  <Text style={{ fontSize: 18 }}>{icon}</Text>
+                </Pressable>
+              )
+            })}
+          </ScrollView>
+        </SoftCard>
+
+        <SoftCard style={styles.section}>
+          <Text style={styles.label}>Color</Text>
+          <View style={styles.colorWrapper}>
+            {HABIT_COLORS.map((color) => {
+              const active = selectedColor === color
+              return (
+                <Pressable key={color} onPress={() => setSelectedColor(color)}>
+                  <View style={[styles.colorSwatch, { backgroundColor: color }, active && styles.colorSwatchActive]} />
+                </Pressable>
+              )
+            })}
+          </View>
+        </SoftCard>
       </ScrollView>
+
+      <PrimaryButton
+        title={submitting ? 'Saving...' : 'Save Changes'}
+        onPress={handleSave}
+        loading={submitting}
+        style={styles.submitButton}
+      />
     </SafeAreaView>
   )
 }
@@ -193,111 +208,120 @@ const EditHabitForm = () => {
 export default EditHabitForm
 
 const styles = StyleSheet.create({
-  formWrapper: {
-    paddingHorizontal: 20,
-    paddingBottom: 60,
+  screen: {
+    flex: 1,
+    backgroundColor: theme.colors.background,
+    paddingHorizontal: theme.spacing.lg,
+    paddingTop: theme.spacing.sm,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
+    marginBottom: theme.spacing.md,
+  },
+  headerTitle: {
+    fontSize: 22,
+    fontWeight: '800',
+    color: theme.colors.textPrimary,
+    letterSpacing: 0.2,
+  },
+  closeBtn: {
+    backgroundColor: theme.colors.backgroundAlt,
+    borderRadius: theme.radii.full,
+    padding: 8,
+  },
+  deleteBtn: {
+    backgroundColor: theme.colors.dangerBg,
+    borderRadius: theme.radii.full,
+    padding: 8,
+  },
+  scrollContent: {
+    paddingBottom: theme.spacing.lg,
+  },
+  heroCard: {
+    borderRadius: theme.radii.xl,
+    padding: theme.spacing.lg,
+    marginBottom: theme.spacing.md,
   },
   iconPreview: {
-    width: 90,
-    height: 90,
-    borderRadius: 45,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: theme.spacing.md,
+  },
+  titleInput: {
+    fontSize: 19,
+    fontWeight: '700',
+    color: theme.colors.textPrimary,
+    paddingVertical: 2,
+  },
+  noteInput: {
+    fontSize: 13,
+    color: 'rgba(26,26,26,0.55)',
+    marginTop: 6,
+  },
+  section: {
+    marginBottom: theme.spacing.md,
   },
   label: {
-    alignSelf: 'flex-start',
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#444',
-    marginTop: 16,
-    marginBottom: 8,
+    fontSize: 12,
+    fontWeight: '700',
+    color: theme.colors.textSecondary,
+    marginBottom: 12,
+    textTransform: 'uppercase',
+    letterSpacing: 0.6,
   },
-  inputField: {
-    width: '100%',
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 12,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    fontSize: 16,
-  },
-  wrapper: {
+  dayWrapper: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 10,
-    width: '100%',
+    gap: 8,
   },
   dayChip: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#ddd',
+    width: 36,
+    height: 36,
+    borderRadius: theme.radii.full,
+    borderWidth: 1.5,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.white,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  dayChipActive: {
-    backgroundColor: '#333',
-    borderColor: '#333',
   },
   dayChipText: {
-    color: '#666',
-    fontWeight: '600',
+    fontSize: 13,
+    fontWeight: '700',
+    color: theme.colors.textSecondary,
   },
   dayChipTextActive: {
-    color: '#fff',
+    color: theme.colors.white,
   },
   iconChip: {
-    width: 44,
-    height: 44,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#ddd',
+    width: 42,
+    height: 42,
+    borderRadius: theme.radii.md,
+    borderWidth: 1.5,
+    borderColor: theme.colors.border,
+    backgroundColor: theme.colors.white,
     justifyContent: 'center',
     alignItems: 'center',
+    marginRight: 10,
   },
-  iconChipActive: {
-    borderColor: '#333',
-    borderWidth: 2,
-    backgroundColor: '#f2f2f2',
+  colorWrapper: {
+    flexDirection: 'row',
+    gap: 16,
   },
-  colors: {
-    height: 36,
-    width: 36,
-    borderRadius: 18,
-    borderWidth: 2,
+  colorSwatch: {
+    width: 32,
+    height: 32,
+    borderRadius: theme.radii.full,
+    borderWidth: 2.5,
     borderColor: 'transparent',
   },
-  colorsActive: {
-    borderColor: '#333',
+  colorSwatchActive: {
+    borderColor: theme.colors.black,
   },
   submitButton: {
-    marginTop: 30,
-    backgroundColor: '#333',
-    paddingVertical: 14,
-    borderRadius: 14,
-    width: '100%',
-    alignItems: 'center',
-  },
-  submitButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  deleteButton: {
-    marginTop: 14,
-    paddingVertical: 14,
-    borderRadius: 14,
-    width: '100%',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#e33',
-  },
-  deleteButtonText: {
-    color: '#e33',
-    fontSize: 16,
-    fontWeight: '600',
+    marginBottom: theme.spacing.sm,
   },
 })
