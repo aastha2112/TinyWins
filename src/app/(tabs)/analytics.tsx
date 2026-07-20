@@ -5,62 +5,67 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Dimensions,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import { useHabits } from "@/context/HabitsContext";
 import { authService } from "@/services/authService";
+import { analyticsService } from "@/services/analyticsService";
 
 type TabType = "Today" | "Weekly" | "Overall";
 
 const Analytics = () => {
   const { habits } = useHabits();
+  console.log("user habits", habits);
   const [activeTab, setActiveTab] = useState<TabType>("Today");
   const [points, setPoints] = useState<number | null>(null);
 
-  const [mockBackendData, setMockBackendData] = useState<any>(null);
+  const [analyticsData, setAnalyticsData] = useState<any>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    authService
-      .getMe()
-      .then((res) => setPoints(res.points))
-      .catch(() => {});
+    setLoading(true);
 
-    const dayLabels = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-    const currentDayLabel = dayLabels[new Date().getDay()];
-
-    const activeToday = habits.filter((h: any) =>
-      h.frequency?.includes(new Date().getDay()),
-    );
-    const completedToday = habits.filter((h: any) => h.currentStreak > 0); // fallback mock rule
-
-    setMockBackendData({
-      today: {
-        completedCount: completedToday.length,
-        totalCount: activeToday.length || 1,
-        empatheticMessage:
-          "Small steps are better than quitting. You're showing up, and that matters! 🌱✨",
-      },
+    Promise.all([
+      authService
+        .getMe()
+        .then((res) => setPoints(res.points))
+        .catch(() => {}),
+      analyticsService
+        .getAnalytics()
+        .then((data) => setAnalyticsData(data))
+        .catch(() => {}),
+    ]).finally(() => {
+      setLoading(false);
     });
   }, [habits]);
 
-  const bestCurrentStreak = habits.length
-    ? Math.max(...habits.map((h: any) => h.currentStreak ?? 0))
-    : 0;
-  const overallLongestStreak = habits.length
-    ? Math.max(...habits.map((h: any) => h.longestStreak ?? 0))
-    : 0;
-  const totalWins = habits.reduce(
-    (sum: number, h: any) => sum + (h.totalWins ?? 0),
-    0,
-  );
-
   const daysOfWeek = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+  if (loading) {
+    return (
+      <SafeAreaView style={[styles.screen, styles.centered]}>
+        <ActivityIndicator size="large" color="#FF7A45" />
+      </SafeAreaView>
+    );
+  }
+
+  const todayStats = analyticsData?.today || {
+    completedCount: 0,
+    totalCount: 0,
+    empatheticMessage: "Every step counts! 🌱",
+    habits: [],
+  };
+  const weeklyStats = analyticsData?.weekly || [];
+  const overallStats = analyticsData?.overall || {
+    bestCurrentStreak: 0,
+    overallLongestStreak: 0,
+    totalWins: 0,
+  };
 
   return (
     <SafeAreaView style={styles.screen}>
-      {/* Empathetic Segmented Controller Navigation */}
       <View style={styles.tabContainer}>
         {(["Today", "Weekly", "Overall"] as TabType[]).map((tab) => (
           <TouchableOpacity
@@ -90,32 +95,30 @@ const Analytics = () => {
         {/* --- TODAY VIEW --- */}
         {activeTab === "Today" && (
           <View style={styles.fullWidth}>
-            {/* Empathetic Callout Ring Summary */}
             <View style={styles.donutCard}>
               <View style={styles.circleProgressDummy}>
                 <Text style={styles.donutValue}>
-                  {mockBackendData?.today.completedCount}/
-                  {mockBackendData?.today.totalCount}
+                  {todayStats.completedCount}/{todayStats.totalCount}
                 </Text>
                 <Text style={styles.donutSubText}>Wins Today</Text>
               </View>
               <Text style={styles.empatheticMessage}>
-                {mockBackendData?.today.empatheticMessage}
+                {todayStats.empatheticMessage}
               </Text>
             </View>
 
             <Text style={styles.sectionTitle}>Today's Target Milestones</Text>
-            {habits.length === 0 ? (
+            {todayStats.habits.length === 0 ? (
               <Text style={styles.emptyText}>
-                No routines active for today!
+                No routines scheduled for today! Rest up or take small steps. 🌟
               </Text>
             ) : (
-              habits.map((habit: any) => (
+              todayStats.habits.map((habit: any) => (
                 <View key={habit.id} style={styles.habitCard}>
                   <View
                     style={[
                       styles.habitIconWrap,
-                      { backgroundColor: habit.color ?? "#FFE6E6" },
+                      { backgroundColor: habit.color ?? "#FAFAFC" },
                     ]}
                   >
                     <Text style={{ fontSize: 18 }}>{habit.icon || "🎯"}</Text>
@@ -124,7 +127,7 @@ const Analytics = () => {
                   <Ionicons
                     name="checkmark-circle"
                     size={24}
-                    color={habit.currentStreak > 0 ? "#4CD964" : "#E5E5EA"}
+                    color={habit.completed ? "#4CD964" : "#E5E5EA"}
                   />
                 </View>
               ))
@@ -136,42 +139,68 @@ const Analytics = () => {
         {activeTab === "Weekly" && (
           <View style={styles.fullWidth}>
             <Text style={styles.sectionTitle}>Weekly Commitment Check</Text>
-            {habits.map((habit: any) => (
-              <View key={habit.id} style={styles.weeklyHabitRow}>
-                <View style={styles.weeklyHabitHeader}>
-                  <Text style={styles.weeklyHabitIcon}>
-                    {habit.icon || "⭐️"}
-                  </Text>
-                  <Text style={styles.weeklyHabitTitle} numberOfLines={1}>
-                    {habit.title}
-                  </Text>
-                </View>
+            {weeklyStats.length === 0 ? (
+              <Text style={styles.emptyText}>
+                Create tracking logs to populate consistency metrics.
+              </Text>
+            ) : (
+              weeklyStats.map((habit: any) => (
+                <View key={habit.id} style={styles.weeklyHabitRow}>
+                  <View style={styles.weeklyHabitHeader}>
+                    <View
+                      style={[
+                        styles.miniIconWrap,
+                        { backgroundColor: habit.color ?? "#E5E5EA" },
+                      ]}
+                    >
+                      <Text style={{ fontSize: 14 }}>{habit.icon || "⭐️"}</Text>
+                    </View>
+                    <Text style={styles.weeklyHabitTitle} numberOfLines={1}>
+                      {habit.title}
+                    </Text>
+                  </View>
 
-                {/* Horizontal Week Tracking Bubbles */}
-                <View style={styles.weekBubbleRow}>
-                  {daysOfWeek.map((day, idx) => {
-                    const isToday = day === "Mon"; // simplified baseline tracker mock
-                    return (
-                      <View key={day} style={styles.dayBubbleContainer}>
-                        <Text style={styles.dayLabelText}>{day}</Text>
-                        <View
-                          style={[
-                            styles.statusBubble,
-                            isToday
-                              ? { backgroundColor: habit.color || "#FF7A45" }
-                              : styles.emptyBubble,
-                          ]}
-                        >
-                          {isToday && (
-                            <Ionicons name="checkmark" size={12} color="#fff" />
-                          )}
+                  <View style={styles.weekBubbleRow}>
+                    {daysOfWeek.map((day) => {
+                      const dayHistory = habit.history?.[day] || {
+                        isScheduled: false,
+                        status: "PENDING",
+                      };
+
+                      let bubbleColor = "#E5E5EA";
+                      let iconName: any = null;
+
+                      if (dayHistory.status === "COMPLETED") {
+                        bubbleColor = habit.color || "#4CD964";
+                        iconName = "checkmark";
+                      } else if (dayHistory.status === "MISSED") {
+                        bubbleColor = "#F2F2F7";
+                      }
+
+                      return (
+                        <View key={day} style={styles.dayBubbleContainer}>
+                          <Text style={styles.dayLabelText}>{day}</Text>
+                          <View
+                            style={[
+                              styles.statusBubble,
+                              { backgroundColor: bubbleColor },
+                            ]}
+                          >
+                            {iconName && (
+                              <Ionicons
+                                name={iconName}
+                                size={12}
+                                color="#fff"
+                              />
+                            )}
+                          </View>
                         </View>
-                      </View>
-                    );
-                  })}
+                      );
+                    })}
+                  </View>
                 </View>
-              </View>
-            ))}
+              ))
+            )}
           </View>
         )}
 
@@ -182,10 +211,14 @@ const Analytics = () => {
               <Ionicons
                 name="flame"
                 size={80}
-                color={bestCurrentStreak > 0 ? "#FF7A45" : "#D9D9D9"}
+                color={
+                  overallStats.bestCurrentStreak > 0 ? "#FF7A45" : "#D9D9D9"
+                }
               />
-              <Text style={styles.streakNumber}>{bestCurrentStreak}</Text>
-              <Text style={styles.streakLabel}>Current Streak Streak</Text>
+              <Text style={styles.streakNumber}>
+                {overallStats.bestCurrentStreak}
+              </Text>
+              <Text style={styles.streakLabel}>Current Streak</Text>
             </View>
 
             <View style={styles.statsRow}>
@@ -195,28 +228,68 @@ const Analytics = () => {
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statBox}>
-                <Text style={styles.statValue}>{overallLongestStreak}</Text>
+                <Text style={styles.statValue}>
+                  {overallStats.overallLongestStreak}
+                </Text>
                 <Text style={styles.statLabel}>Longest Streak</Text>
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statBox}>
-                <Text style={styles.statValue}>{totalWins}</Text>
+                <Text style={styles.statValue}>{overallStats.totalWins}</Text>
                 <Text style={styles.statLabel}>Total Wins</Text>
               </View>
             </View>
 
-            {/* Comeback encouragement award module */}
-            <View style={styles.awardCard}>
-              <Ionicons name="shield-checkmark" size={32} color="#FFD700" />
-              <View style={{ flex: 1, marginLeft: 12 }}>
-                <Text style={styles.awardTitle}>
-                  The "Still Showing Up" Shield
-                </Text>
-                <Text style={styles.awardSub}>
-                  Earned for resuming tracks without giving up.
-                </Text>
-              </View>
-            </View>
+            <Text style={[styles.sectionTitle, { marginTop: 25 }]}>
+              Consistency Calendars
+            </Text>
+
+            {(analyticsData?.overall?.habitsCalendar || []).length === 0 ? (
+              <Text style={styles.emptyText}>
+                No tracking history available yet to show on the calendar grid.
+              </Text>
+            ) : (
+              (analyticsData?.overall?.habitsCalendar || []).map(
+                (habit: any) => (
+                  <View key={habit.id} style={styles.calendarCard}>
+                    <View style={styles.calendarHeader}>
+                      <View
+                        style={[
+                          styles.miniIconWrap,
+                          { backgroundColor: habit.color ?? "#E5E5EA" },
+                        ]}
+                      >
+                        <Text style={{ fontSize: 13 }}>
+                          {habit.icon || "⭐️"}
+                        </Text>
+                      </View>
+                      <Text style={styles.calendarHabitTitle}>
+                        {habit.title}
+                      </Text>
+                    </View>
+
+                    <View style={styles.gridContainer}>
+                      {(habit.calendarHistory || []).map((day: any) => (
+                        <View
+                          key={day.date}
+                          style={[
+                            styles.calendarDot,
+                            {
+                              backgroundColor: day.completed
+                                ? habit.color || "#4CD964"
+                                : "#E5E5EA",
+                            },
+                          ]}
+                        />
+                      ))}
+                    </View>
+                    <Text style={styles.calendarFooterText}>
+                      Showing active log history (Past 30 Days)
+                    </Text>
+                  </View>
+                ),
+              )
+            )}
           </View>
         )}
       </ScrollView>
@@ -228,6 +301,7 @@ export default Analytics;
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: "#FFF" },
+  centered: { justifyContent: "center", alignItems: "center" },
   container: { alignItems: "center", paddingHorizontal: 20, paddingBottom: 40 },
   fullWidth: { width: "100%" },
   tabContainer: {
@@ -289,7 +363,12 @@ const styles = StyleSheet.create({
     color: "#1C1C1E",
     marginVertical: 12,
   },
-  emptyText: { color: "#999", textAlign: "center", marginTop: 10 },
+  emptyText: {
+    color: "#999",
+    textAlign: "center",
+    marginTop: 10,
+    lineHeight: 18,
+  },
   habitCard: {
     flexDirection: "row",
     alignItems: "center",
@@ -318,7 +397,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 12,
   },
-  weeklyHabitIcon: { fontSize: 16, marginRight: 8 },
+  miniIconWrap: {
+    width: 26,
+    height: 26,
+    borderRadius: 13,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 8,
+  },
   weeklyHabitTitle: { fontSize: 14, fontWeight: "600", color: "#1C1C1E" },
   weekBubbleRow: {
     flexDirection: "row",
@@ -339,7 +425,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  emptyBubble: { backgroundColor: "#E5E5EA" },
   fireWrapper: { alignItems: "center", marginVertical: 15 },
   streakNumber: { fontSize: 48, fontWeight: "800", color: "#1C1C1E" },
   streakLabel: { fontSize: 13, color: "#8E8E93", fontWeight: "600" },
@@ -366,5 +451,41 @@ const styles = StyleSheet.create({
     borderColor: "#FFEAA7",
   },
   awardTitle: { fontSize: 14, fontWeight: "700", color: "#D4AF37" },
-  awardSub: { fontSize: 12, color: "#7F6D2B", marginTop: 2 },
+  awardSub: { fontSize: 12, color: "#7F6D2B", marginTop: 4, lineHeight: 16 },
+  calendarCard: {
+    backgroundColor: "#FAFAFC",
+    borderRadius: 16,
+    padding: 16,
+    marginBottom: 12,
+    width: "100%",
+  },
+  calendarHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  calendarHabitTitle: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#1C1C1E",
+    marginLeft: 4,
+  },
+  gridContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 6,
+    justifyContent: "flex-start",
+    paddingVertical: 4,
+  },
+  calendarDot: {
+    width: 24,
+    height: 24,
+    borderRadius: 6,
+  },
+  calendarFooterText: {
+    fontSize: 10,
+    color: "#8E8E93",
+    marginTop: 8,
+    textAlign: "right",
+  },
 });
