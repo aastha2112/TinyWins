@@ -20,29 +20,26 @@ const AuthButtonsModal = ({
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={[onboardingStyles.title, { width: "65%" }]}>
-            Start your journey
+          <Text style={[onboardingStyles.title, { width: "70%" }]}>
+          You're all set to begin.
           </Text>
-          <Text style={[onboardingStyles.subtitle, { width: "65%" }]}>
-            Track your goals, complete daily tasks, and stay focused{" "}
-          </Text>
+          <Text style={[onboardingStyles.subtitle, { width: "70%",  lineHeight: 23 }]}>
+          Sign in to save your progress and pick up right where you left off.         
+           </Text>
           <Pressable
             style={onboardingStyles.button}
             onPress={() => router.push("/(auth)/Register")}
           >
-            <Text style={onboardingStyles.buttonText}>Register</Text>
+            <Text style={onboardingStyles.buttonText}>Create account</Text>
           </Pressable>
           <Pressable
             style={onboardingStyles.button}
             onPress={() => router.push("/(auth)/Login")}
           >
-            <Text style={onboardingStyles.buttonText}>Login</Text>
+            <Text style={onboardingStyles.buttonText}>Log In</Text>
           </Pressable>
-          {/* <Pressable onPress={onPress}>
-            <Text>Go Back</Text>
-          </Pressable> */}
           <Text
-            style={[onboardingStyles.subtitle, { width: "65%", fontSize: 10 }]}
+            style={[onboardingStyles.subtitle, { width: "80%", fontSize: 10 }]}
           >
             By continuing, you agree to our Terms of Use and Privacy Policy
           </Text>

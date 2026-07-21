@@ -36,11 +36,9 @@ export default Home;
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    backgroundColor: '#fff',
   },
   scrollContent: {
     paddingHorizontal: 20,
-    paddingTop: 10,
     paddingBottom: 140,
   },
 });

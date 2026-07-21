@@ -300,7 +300,7 @@ const Analytics = () => {
 export default Analytics;
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: "#FFF" },
+  screen: { flex: 1},
   centered: { justifyContent: "center", alignItems: "center" },
   container: { alignItems: "center", paddingHorizontal: 20, paddingBottom: 40 },
   fullWidth: { width: "100%" },
