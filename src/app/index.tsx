@@ -7,7 +7,7 @@ export default function App() {
 
   return (
     <>
-    <OnboardingStep title={'Small steps count. Every time.'} body={`Progress isn't measured by giant leaps. It's built from small moments of showing up, again and again.`} buttonText={`Let's go`} activeDotIndex={0} imageSrc={LogoGlow} onButtonPress={()=>{router.push("/onboarding/SecondScreen")}}/>
+    <OnboardingStep title={'Small steps count. Every time.'} body={`You don't have to do everything today. Just one small step is enough.`} buttonText={`Let's go`} activeDotIndex={0} imageSrc={LogoGlow} onButtonPress={()=>{router.push("/onboarding/SecondScreen")}}/>
     </>
   );
 }

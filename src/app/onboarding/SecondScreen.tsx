@@ -7,7 +7,7 @@ export default function OnboardingTwo() {
 
   return (
     <>
-    <OnboardingStep title={`Perfection isn't the goal.`} body={`Growth isn't a straight line, and you don't have to start from scratch every time life happens.`} buttonText={`Continue`} activeDotIndex={1} imageSrc={LogoGlow} onButtonPress={()=>{router.push("/onboarding/FinalScreen")}}/>
+    <OnboardingStep title={`You don't have to be perfect.`} body={`Growth isn't a straight line. Some days are easier than others, and that's okay. Every small step still counts.`} buttonText={`Continue`} activeDotIndex={1} imageSrc={LogoGlow} onButtonPress={()=>{router.push("/onboarding/FinalScreen")}}/>
     </>
   );
 }

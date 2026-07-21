@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { Alert } from "react-native";
 import { Habit } from "@/types/habit.types";
 import { habitService } from "@/services/habitService";
 import { winsService } from "@/services/winService";
+import { useAuth } from "./AuthContext";
 
 export interface HabitContextInterface{
     habits: Habit[],
@@ -31,13 +31,16 @@ const HabitProvider = ({children}: {children: React.ReactNode})=>{
     const [habits, setHabits]= useState<Habit[]>([])
     const [isLoading, setIsLoading]= useState(false)
     const [todaysWins, setTodaysWins] = useState<string[]>([])
+    const { isAuthenticated, isLoading: authLoading } = useAuth()
 
     useEffect(() => {
-        fetchHabits()
-        const now = new Date()
-        const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
-        getTodaysWins(today)
-      }, [])
+      if (authLoading) return
+      if (!isAuthenticated) return
+      fetchHabits()
+      const now = new Date()
+      const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`
+      getTodaysWins(today)
+      }, [authLoading, isAuthenticated])
 
     //fetch habits
     const fetchHabits= async()=>{
@@ -46,7 +49,7 @@ const HabitProvider = ({children}: {children: React.ReactNode})=>{
             const allHabits = await habitService.getHabits()
             setHabits(allHabits)
         } catch (error) {
-            Alert.alert("Couldn't fetch habits!", String(error))
+            console.log("Couldn't fetch habits!", error)
         } finally{
         setIsLoading(false)
         }
@@ -57,10 +60,9 @@ const HabitProvider = ({children}: {children: React.ReactNode})=>{
         setIsLoading(true)
         try {
             const response = await habitService.createHabit(payload)
-            console.log('CREATE RESPONSE', response)
             await fetchHabits()
         } catch (error) {
-            Alert.alert("Couldn't add habit!", String(error))
+            console.log("Couldn't add habit!", error)
         } finally{
         setIsLoading(false)
         }
@@ -73,7 +75,7 @@ const HabitProvider = ({children}: {children: React.ReactNode})=>{
             await habitService.updateHabit(id, payload)
             await fetchHabits()
         } catch (error) {
-            Alert.alert("Couldn't update habit!", String(error))
+            console.log("Couldn't update habit!", error)
         } finally{
         setIsLoading(false)
         }
@@ -86,7 +88,7 @@ const HabitProvider = ({children}: {children: React.ReactNode})=>{
             await habitService.deleteHabit(id)
             await fetchHabits()
         } catch (error) {
-            Alert.alert("Couldn't delete habit!", String(error))
+            console.log("Couldn't delete habit!", error)
         } finally{
         setIsLoading(false)
         }
@@ -99,7 +101,7 @@ const HabitProvider = ({children}: {children: React.ReactNode})=>{
             setTodaysWins(wins.map((win: any) => win.habitId))
         }
         catch (err){
-            Alert.alert("Uh Oh! Couldn't get wins!", String(err))
+            console.log("Couldn't get wins!", err)
         }
     }
 
@@ -113,7 +115,7 @@ const HabitProvider = ({children}: {children: React.ReactNode})=>{
                 setTodaysWins(prev => prev.filter(id => id !== habitId))
             }
         } catch (error) {
-            Alert.alert("Uh Oh! Couldn't complete habit!", String(error))
+            console.log("Couldn't complete habit!", error)
         }
     }
 

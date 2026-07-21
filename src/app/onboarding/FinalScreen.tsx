@@ -12,7 +12,7 @@ const OnboardingThree = () => {
     <>
       <OnboardingStep
         title={`Ready for your first tiny win?`}
-        body={`Focus on one small action you can do right now. Tomorrow's success begins with today's tiny win.`}
+        body={`Pick one small habit. We'll celebrate every time you show up.`}
         buttonText={`Let's begin`}
         activeDotIndex={2}
         imageSrc={LogoGlow}

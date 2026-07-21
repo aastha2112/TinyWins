@@ -1,4 +1,3 @@
-import { Alert } from 'react-native';
 import {tokenStorage} from '../utils/tokenStorage';
 
 const BASE_URL = 'http://10.0.2.2:8080';
@@ -34,11 +33,9 @@ export const apiClient = async (endpoint : string, options: RequestOptions = {})
     console.log('APICLIENT DATA', data)
 
     if(!response.ok){
-        console.log('RESPONSE NOT OK')
         if(response.status === 401){
             await tokenStorage.deleteToken()
         }
-        Alert.alert(data.message)
         throw new Error(data.message || 'Something went wrong')
 
     }
