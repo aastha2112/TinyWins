@@ -15,7 +15,9 @@ const Wins = () => {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.headerTitle}>Wins</Text>
+        {!isLoading && (
+          <Text style={styles.headerTitle}>{habits.length > 0 ? 'Your wins' : 'Your wins will live here.'}</Text>
+        )}
 
         {isLoading ? (
           <Text style={{ color: '#999', marginTop: 20 }}>Loading...</Text>
