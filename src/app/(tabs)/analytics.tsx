@@ -95,23 +95,18 @@ const Analytics = () => {
         {/* --- TODAY VIEW --- */}
         {activeTab === "Today" && (
           <View style={styles.fullWidth}>
-            <View style={styles.donutCard}>
-              <View style={styles.circleProgressDummy}>
-                <Text style={styles.donutValue}>
-                  {todayStats.completedCount}/{todayStats.totalCount}
-                </Text>
-                <Text style={styles.donutSubText}>Wins Today</Text>
-              </View>
-              <Text style={styles.empatheticMessage}>
-                {todayStats.empatheticMessage}
-              </Text>
-            </View>
-
-            <Text style={styles.sectionTitle}>Today's Target Milestones</Text>
             {todayStats.habits.length === 0 ? (
-              <Text style={styles.emptyText}>
-                No routines scheduled for today! Rest up or take small steps. 🌟
-              </Text>
+              <View style={{ alignItems: 'center', paddingTop: 60 }}>
+                <View style={{ width: 100, height: 100, borderRadius: 24, backgroundColor: '#F2F2F7', justifyContent: 'center', alignItems: 'center', marginBottom: 16 }}>
+                  <Ionicons name="leaf-outline" size={44} color="#C9C9C9" />
+                </View>
+                <Text style={{ fontSize: 17, fontWeight: '700', color: '#222', textAlign: 'center' }}>
+                  Today is a fresh page
+                </Text>
+                <Text style={{ fontSize: 13, color: '#8E8E93', textAlign: 'center', marginTop: 6, lineHeight: 18, paddingHorizontal: 20 }}>
+                  No habits yet, and that's completely okay. One small action is enough to begin.
+                </Text>
+              </View>
             ) : (
               todayStats.habits.map((habit: any) => (
                 <View key={habit.id} style={styles.habitCard}>
@@ -138,11 +133,18 @@ const Analytics = () => {
         {/* --- WEEKLY VIEW --- */}
         {activeTab === "Weekly" && (
           <View style={styles.fullWidth}>
-            <Text style={styles.sectionTitle}>Weekly Commitment Check</Text>
             {weeklyStats.length === 0 ? (
-              <Text style={styles.emptyText}>
-                Create tracking logs to populate consistency metrics.
-              </Text>
+              <View style={{ alignItems: 'center', paddingTop: 60 }}>
+                <View style={{ width: 100, height: 100, borderRadius: 24, backgroundColor: '#F2F2F7', justifyContent: 'center', alignItems: 'center', marginBottom: 16 }}>
+                  <Ionicons name="calendar-outline" size={44} color="#C9C9C9" />
+                </View>
+                <Text style={{ fontSize: 17, fontWeight: '700', color: '#222', textAlign: 'center' }}>
+                  Your week is waiting for its first tiny win
+                </Text>
+                <Text style={{ fontSize: 13, color: '#8E8E93', textAlign: 'center', marginTop: 6, lineHeight: 18, paddingHorizontal: 20 }}>
+                  When you complete habits, you'll see moments of progress appear here, one day at a time.
+                </Text>
+              </View>
             ) : (
               weeklyStats.map((habit: any) => (
                 <View key={habit.id} style={styles.weeklyHabitRow}>
@@ -207,88 +209,67 @@ const Analytics = () => {
         {/* --- OVERALL VIEW --- */}
         {activeTab === "Overall" && (
           <View style={styles.fullWidth}>
-            <View style={styles.fireWrapper}>
-              <Ionicons
-                name="flame"
-                size={80}
-                color={
-                  overallStats.bestCurrentStreak > 0 ? "#FF7A45" : "#D9D9D9"
-                }
-              />
-              <Text style={styles.streakNumber}>
-                {overallStats.bestCurrentStreak}
-              </Text>
-              <Text style={styles.streakLabel}>Current Streak</Text>
-            </View>
-
-            <View style={styles.statsRow}>
-              <View style={styles.statBox}>
-                <Text style={styles.statValue}>{points ?? "—"}</Text>
-                <Text style={styles.statLabel}>Points</Text>
-              </View>
-              <View style={styles.statDivider} />
-              <View style={styles.statBox}>
-                <Text style={styles.statValue}>
-                  {overallStats.overallLongestStreak}
+            {habits.length === 0 ? (
+              <View style={{ alignItems: 'center', paddingTop: 60 }}>
+                <View style={{ width: 100, height: 100, borderRadius: 24, backgroundColor: '#F2F2F7', justifyContent: 'center', alignItems: 'center', marginBottom: 16 }}>
+                  <Ionicons name="trophy-outline" size={44} color="#C9C9C9" />
+                </View>
+                <Text style={{ fontSize: 17, fontWeight: '700', color: '#222', textAlign: 'center' }}>
+                  Every journey starts with a single tiny win
                 </Text>
-                <Text style={styles.statLabel}>Longest Streak</Text>
+                <Text style={{ fontSize: 13, color: '#8E8E93', textAlign: 'center', marginTop: 6, lineHeight: 18, paddingHorizontal: 20 }}>
+                  Create your first habit, and we'll begin building a gentle picture of your progress over time.
+                </Text>
               </View>
-              <View style={styles.statDivider} />
-              <View style={styles.statBox}>
-                <Text style={styles.statValue}>{overallStats.totalWins}</Text>
-                <Text style={styles.statLabel}>Total Wins</Text>
-              </View>
-            </View>
-
-            <Text style={[styles.sectionTitle, { marginTop: 25 }]}>
-              Consistency Calendars
-            </Text>
-
-            {(analyticsData?.overall?.habitsCalendar || []).length === 0 ? (
-              <Text style={styles.emptyText}>
-                No tracking history available yet to show on the calendar grid.
-              </Text>
             ) : (
-              (analyticsData?.overall?.habitsCalendar || []).map(
-                (habit: any) => (
-                  <View key={habit.id} style={styles.calendarCard}>
-                    <View style={styles.calendarHeader}>
-                      <View
-                        style={[
-                          styles.miniIconWrap,
-                          { backgroundColor: habit.color ?? "#E5E5EA" },
-                        ]}
-                      >
-                        <Text style={{ fontSize: 13 }}>
-                          {habit.icon || "⭐️"}
-                        </Text>
-                      </View>
-                      <Text style={styles.calendarHabitTitle}>
-                        {habit.title}
-                      </Text>
-                    </View>
-
-                    <View style={styles.gridContainer}>
-                      {(habit.calendarHistory || []).map((day: any) => (
-                        <View
-                          key={day.date}
-                          style={[
-                            styles.calendarDot,
-                            {
-                              backgroundColor: day.completed
-                                ? habit.color || "#4CD964"
-                                : "#E5E5EA",
-                            },
-                          ]}
-                        />
-                      ))}
-                    </View>
-                    <Text style={styles.calendarFooterText}>
-                      Showing active log history (Past 30 Days)
-                    </Text>
+              <>
+                {overallStats.bestCurrentStreak >= 1 && (
+                  <View style={styles.fireWrapper}>
+                    <Ionicons name="flame" size={80} color="#FF7A45" />
+                    <Text style={styles.streakNumber}>{overallStats.bestCurrentStreak}</Text>
+                    <Text style={styles.streakLabel}>Current Streak</Text>
                   </View>
-                ),
-              )
+                )}
+
+                <View style={styles.statsRow}>
+                  <View style={styles.statBox}>
+                    <Text style={styles.statValue}>{points ?? "—"}</Text>
+                    <Text style={styles.statLabel}>Points</Text>
+                  </View>
+                  <View style={styles.statDivider} />
+                  <View style={styles.statBox}>
+                    <Text style={styles.statValue}>{overallStats.overallLongestStreak}</Text>
+                    <Text style={styles.statLabel}>Longest Streak</Text>
+                  </View>
+                  <View style={styles.statDivider} />
+                  <View style={styles.statBox}>
+                    <Text style={styles.statValue}>{overallStats.totalWins}</Text>
+                    <Text style={styles.statLabel}>Total Wins</Text>
+                  </View>
+                </View>
+
+                {(analyticsData?.overall?.habitsCalendar || []).length > 0 && (
+                  (analyticsData?.overall?.habitsCalendar || []).map((habit: any) => (
+                    <View key={habit.id} style={styles.calendarCard}>
+                      <View style={styles.calendarHeader}>
+                        <View style={[styles.miniIconWrap, { backgroundColor: habit.color ?? "#E5E5EA" }]}>
+                          <Text style={{ fontSize: 13 }}>{habit.icon || "⭐️"}</Text>
+                        </View>
+                        <Text style={styles.calendarHabitTitle}>{habit.title}</Text>
+                      </View>
+                      <View style={styles.gridContainer}>
+                        {(habit.calendarHistory || []).map((day: any) => (
+                          <View
+                            key={day.date}
+                            style={[styles.calendarDot, { backgroundColor: day.completed ? habit.color || "#4CD964" : "#E5E5EA" }]}
+                          />
+                        ))}
+                      </View>
+                      <Text style={styles.calendarFooterText}>Showing active log history (Past 30 Days)</Text>
+                    </View>
+                  ))
+                )}
+              </>
             )}
           </View>
         )}
@@ -302,7 +283,7 @@ export default Analytics;
 const styles = StyleSheet.create({
   screen: { flex: 1},
   centered: { justifyContent: "center", alignItems: "center" },
-  container: { alignItems: "center", paddingHorizontal: 20, paddingBottom: 40 },
+  container: { alignItems: "center", paddingHorizontal: 20, paddingBottom: 40, flexGrow: 1 },
   fullWidth: { width: "100%" },
   tabContainer: {
     flexDirection: "row",

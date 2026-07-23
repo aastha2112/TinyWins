@@ -63,9 +63,14 @@ const AllHabits = ({ habitsForToday }: { habitsForToday: Habit[] }) => {
                 <PlaceholderCard key={i} title={p.title} icon={p.icon} days={p.days} />
               ))}
             </View>
-            <Text style={{ color: '#555', textAlign: 'center', marginTop: 44, fontSize: 15, fontStyle: 'italic', width: '50%', margin: 'auto' , lineHeight: 22}}>
-              Create your first habit to start filling this space.
-            </Text>
+            <View style={{ alignItems: 'center' }}>
+              <View style={{ width: 50, height: 50, borderRadius: 24, backgroundColor: '#F2F2F7', justifyContent: 'center', alignItems: 'center', marginBottom: 16 }}>
+                <Ionicons name="paper-plane-outline" size={44} color="#C9C9C9" />
+              </View>
+              <Text style={{ color: '#555', textAlign: 'center', fontSize: 15, fontStyle: 'italic', width: '70%', lineHeight: 22 }}>
+                Create your first habit to start filling this space.
+              </Text>
+            </View>
           </View>
         )}
       </View>
